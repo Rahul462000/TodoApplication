@@ -1,12 +1,27 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "./Todo.css"
 import Notes from "./images/Notes.png"
+
+
+// setdata from localstorage
+const getLocalItems = () =>{
+    let list = localStorage.getItem('lists')
+    console.log(list)
+
+    // but humne data ko as arrya format mein send kiya hai
+    if(list){
+        return JSON.parse(localStorage.getItem('lists'))
+    } else{
+        return [];
+    }
+}
+
 
 const Todo = () => {
     // user kya likh raha hai wo get karna 
     const[inputData,setInputData] = useState('');
     // ab hame sare items add karna hai
-    const[items,setItems] = useState([]);
+    const[items,setItems] = useState(getLocalItems);
 
 
 // sare datra ko ek array mein store kar diya aur phir use store kar diya setItems mein
@@ -38,6 +53,14 @@ const Todo = () => {
     const deleteAll = () =>{
         setItems([]);
     }
+
+
+    // now how to store the list in local storage
+// useeffect mein value tabi add hogi jab nhi items ki value change hogi
+// is method se items set to ho gaye abh get karnae hai
+    useEffect(() =>{
+        localStorage.setItem('lists',JSON.stringify(items))
+    },[items])
 
 
 
